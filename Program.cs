@@ -1,7 +1,22 @@
+using ContactManagement.Data.Context;
+using ContactManagement.Data.Repository;
+using ContactManagement.Interfaces;
+using ContactManagement.Model;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseMySql(ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("MariaDB"))));
+
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
+    .AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddScoped<IContactRepository, ContactRepository>();
+builder.Services.AddScoped<IUser, AspNetUser>();
+builder.Services.AddHttpContextAccessor();
+
 // Add services to the container.
-builder.Services.AddRazorPages();
+builder.Services.AddRazorPages().AddMvcOptions(options => options.Filters.Add(new AuthorizeFilter()));
 
 var app = builder.Build();
 
@@ -17,6 +32,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseAuthentication();;
 
 app.UseAuthorization();
 

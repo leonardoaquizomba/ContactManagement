@@ -1,33 +1,30 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ContactManagement.Validation;
+using System.ComponentModel.DataAnnotations;
 
 namespace ContactManagement.Model
 {
     public class Contact : EntityAudit
     {
-        private string _name;
-        private int _phone;
-        private string _email;
+        //protected Contact() { }
 
-        public Contact(string name, int phone, string email)
-        {
-            _name = name;
-            _phone = phone;
-            _email = email;
-        }
-
-        protected Contact() { }
-
-        [DataType(DataType.Text, ErrorMessage = "")]
+        [DataType(DataType.Text)]
         [Required]
         [MinLength(5)]
-        public string Name { get => _name; set => _name = value; }
+        [MaxLength(191)]
+        [Display(Name = "Your name")]
+        public string Name { get; set; }
+
+        [DataType(DataType.PhoneNumber)]
+        [Required]
+        [Display(Name = "Your phone")]
+        [PhoneCheck]
+        public int Phone { get; set; }
 
         [Required]
-        public int Phone { get => _phone; set => _phone = value; }
-
-        [Required]
-        [DataType(DataType.EmailAddress, ErrorMessage = "")]
-        [Display(Name = "E-mail")]
-        public string Email { get => _email; set => _email = value; }
+        [DataType(DataType.EmailAddress)]
+        [Display(Name = "Your e-mail")]
+        [EmailCheck]
+        [MaxLength(191)]
+        public string Email { get; set; }
     }
 }
