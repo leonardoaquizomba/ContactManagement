@@ -1,9 +1,26 @@
-# ContactManagement
 
-Para execuÁ„o da aplicaÁ„o devera seguir os seguintes passos.
-1 - Baixar o projecto.
-2 - Restaurar o pacotes atraves do comando: dotnet restore
-3 - Editar o arquivo appsettings.json informando a string de conex„o em MariaDB: <stringconex„o>
-4 - Caso n„o existe a pasta Migrations executar o comando: Add-Migration init e posteriomente Update-Database
-5 - Fazer o Debugging do projecto
-6 - Podera criar uma conta atravez do menu Register e fazer o Login.
+# Contact Management
+
+Sistema de Gest√£o de contactos.
+
+
+## Funcionalidades
+
+- Adicionar Contacto
+- Editar Contacto
+- Visualizar Contacto
+- Deletar Contacto
+- Lista COntactos
+
+
+## Documenta√ß√£o
+
+[Documenta√ß√£o]
+
+Para execu√ß√£o da aplica√ß√£o devera seguir os seguintes passos.
+- Baixar o projecto.
+- Restaurar o pacotes atraves do comando: dotnet restore
+- Editar o arquivo appsettings.json informando a string de conex√£o em MariaDB: <stringconex√£o>
+- Caso n√£o existe a pasta Migrations executar o comando: Add-Migration e Update-Database
+- Fazer o Debugging do projecto
+- Podera criar uma conta atravez do menu Register e fazer o Login.
