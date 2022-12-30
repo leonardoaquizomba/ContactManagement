@@ -1,6 +1,7 @@
 ﻿using ContactManagement.Data.Mappings;
 using ContactManagement.Interfaces;
 using ContactManagement.Model;
+using EntityFramework.Exceptions.MySQL.Pomelo;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -11,12 +12,28 @@ namespace ContactManagement.Data.Context
     {
         protected readonly IUser _user;
         public IConfiguration Configuration { get; }
+        private IHostEnvironment Environment { get; }
 
         public DbSet<Contact> Contacts { get; set; }
 
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IUser user) : base(options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IUser user, IHostEnvironment environment) : base(options)
         {
             _user = user;
+            Environment = environment;
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (Environment.IsDevelopment())
+            {
+                optionsBuilder.EnableDetailedErrors();
+                optionsBuilder.EnableSensitiveDataLogging();
+                optionsBuilder.UseExceptionProcessor();
+            }
+
+            optionsBuilder.UseMySql(ServerVersion.AutoDetect(Configuration.GetConnectionString("MariaDB")));
+
+            base.OnConfiguring(optionsBuilder);
         }
 
         protected override void OnModelCreating(ModelBuilder builder)

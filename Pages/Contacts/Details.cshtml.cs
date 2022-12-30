@@ -8,6 +8,8 @@ namespace ContactManagement.Pages.Contacts
     public class DetailsModel : PageModel
     {
         private readonly IContactRepository _contactRepository;
+
+        [BindProperty]
         public Contact Contact { get; set; }
         public DetailsModel(IContactRepository contactRepository)
         {

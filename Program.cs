@@ -7,10 +7,11 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseMySql(ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("MariaDB"))));
+builder.Services.AddDbContext<ApplicationDbContext>(options => { });
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<ApplicationDbContext>();
+
 builder.Services.AddScoped<IContactRepository, ContactRepository>();
 builder.Services.AddScoped<IUser, AspNetUser>();
 builder.Services.AddHttpContextAccessor();

@@ -9,7 +9,7 @@ namespace ContactManagement.Validation
             ValidationContext validationContext)
         {
             var context = (ApplicationDbContext)validationContext.GetService(typeof(ApplicationDbContext));
-            if (!context.Contacts.Any(a => a.Phone.ToString() == value.ToString()))
+            if (!context.Contacts.Any(a => a.Phone.Trim() == value.ToString().Trim()))
             {
                 return ValidationResult.Success;
             }

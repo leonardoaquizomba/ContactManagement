@@ -9,11 +9,11 @@ namespace ContactManagement.Validation
             ValidationContext validationContext)
         {
             var context = (ApplicationDbContext)validationContext.GetService(typeof(ApplicationDbContext));
-            if (!context.Contacts.Any(a => a.Email.ToLower() == value.ToString().ToLower()))
+            if (context.Contacts.Any(a => a.Email.Trim().ToLower() == value.ToString().Trim().ToLower()))
             {
-                return ValidationResult.Success;
+                return new ValidationResult("Email exists");
             }
-            return new ValidationResult("Email exists");
+            return ValidationResult.Success;
         }
     }
 }

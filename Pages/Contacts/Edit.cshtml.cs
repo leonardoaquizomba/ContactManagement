@@ -1,5 +1,6 @@
 using ContactManagement.Interfaces;
 using ContactManagement.Model;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ContactManagement.Pages.Contacts
@@ -7,6 +8,8 @@ namespace ContactManagement.Pages.Contacts
     public class EditModel : PageModel
     {
         private readonly IContactRepository _contactRepository;
+
+        [BindProperty]
         public Contact Contact { get; set; }
 
         public EditModel(IContactRepository contactRepository)

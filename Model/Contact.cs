@@ -14,11 +14,12 @@ namespace ContactManagement.Model
         [Display(Name = "Your name")]
         public string Name { get; set; }
 
-        [DataType(DataType.PhoneNumber)]
         [Required]
+        [DataType(DataType.PhoneNumber)]
         [Display(Name = "Your phone")]
+        [MinLength(5)]
         [PhoneCheck]
-        public int Phone { get; set; }
+        public string Phone { get; set; }
 
         [Required]
         [DataType(DataType.EmailAddress)]
