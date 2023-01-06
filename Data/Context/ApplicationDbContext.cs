@@ -1,4 +1,4 @@
-﻿using ContactManagement.Data.Mappings;
+using ContactManagement.Data.Mappings;
 using ContactManagement.Interfaces;
 using ContactManagement.Model;
 using EntityFramework.Exceptions.MySQL.Pomelo;
@@ -11,27 +11,30 @@ namespace ContactManagement.Data.Context
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         protected readonly IUser _user;
-        public IConfiguration Configuration { get; }
-        private IHostEnvironment Environment { get; }
+        protected IHostEnvironment Environment { get; }
+        protected IConfiguration Configuration { get; }
 
-        public DbSet<Contact> Contacts { get; set; }
-
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IUser user, IHostEnvironment environment) : base(options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IUser user, IHostEnvironment environment, IConfiguration configuration) : base(options)
         {
             _user = user;
             Environment = environment;
+            Configuration = configuration;
         }
+
+        public DbSet<Contact> Contacts { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (Environment.IsDevelopment())
             {
-                optionsBuilder.EnableDetailedErrors();
                 optionsBuilder.EnableSensitiveDataLogging();
+                optionsBuilder.EnableDetailedErrors();
                 optionsBuilder.UseExceptionProcessor();
             }
 
-            optionsBuilder.UseMySql(ServerVersion.AutoDetect(Configuration.GetConnectionString("MariaDB")));
+            optionsBuilder.UseMySql(connectionString: Configuration.GetConnectionString("MariaDB"),
+                                    serverVersion: new MySqlServerVersion(version: new Version(major: 10, minor: 6, build: 11)))
+                .LogTo(Console.WriteLine, LogLevel.Information);
 
             base.OnConfiguring(optionsBuilder);
         }
@@ -39,7 +42,6 @@ namespace ContactManagement.Data.Context
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfiguration(new ContactMap());
-
             base.OnModelCreating(builder);
         }
 
@@ -78,7 +80,6 @@ namespace ContactManagement.Data.Context
         private void UpdateTimestamps(List<EntityEntry> entries)
         {
             var filtered = entries.Where(x => x.State == EntityState.Added || x.State == EntityState.Modified);
-
             var currentUserName = _user.Name;
 
             foreach (var entry in filtered)
